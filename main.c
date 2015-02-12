@@ -170,8 +170,9 @@ int execute_command(char *bin, char **args){
 /**
 * int save_history(char **history, char *cmd_input, int commands_run)
 *
-* @param history {char *} binary eg {'ls' in 'ls -al'}
-* @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
+* @param history {char **} history string list
+* @param cmd_input {char *} cmd str eg {'ls -al'}
+* @param commands_run {int} number of commands that have been run
 *
 * update history to include cmd_input
 */
@@ -184,10 +185,10 @@ int save_history(char **history, char *cmd_input, int commands_run){
 /**
 * int print_history(char **history, int commands_run)
 *
-* @param history {char *} binary eg {'ls' in 'ls -al'}
-* @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
+* @param history {char **} history string list
+* @param commands_run {int} number of commands that have been run
 *
-* update history to include cmd_input
+* print history
 */
 int print_history(char **history, int commands_run){
   int hist_num = HISTORY_SIZE+1,
@@ -207,10 +208,11 @@ int print_history(char **history, int commands_run){
 /**
 * int run_history(char **history, int commands_run, int num_back)
 *
-* @param history {char *} binary eg {'ls' in 'ls -al'}
-* @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
+* @param history {char **} binary eg {'ls' in 'ls -al'}
+* @param commands_run {int} number of commands that have been run
+* @param num_back {int} place in history to run
 *
-* update history to include cmd_input
+* run command at num_back in history
 */
 int run_history(char **history, int commands_run, int num_back){
   int index = (commands_run-1-num_back)%HISTORY_SIZE,
