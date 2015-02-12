@@ -226,7 +226,7 @@ int run_history(char **history, int commands_run, int num_back){
   int line_length = 0, counter = 0;
   i = 0;
   do {
-    for(counter = 0; isalpha(history[index][i]) ; counter++,i++) {
+    for(counter = 0; isalpha(history[index][i]); counter++,i++) {
       args[argc][counter] = history[index][i]; // putchar (history[index][i]);  //printf("%c", c);
     }
     args[argc++][counter] = '\0';

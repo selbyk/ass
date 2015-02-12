@@ -16,7 +16,8 @@ My solution to the first assignment in Operating System Concepts,
 * ~~Fork a child process using `fork()`~~
 * ~~Child process should invoke `execvp()`~~
 * ~~If command prepended with '&', parent should invoke `wait()`~~
-* History
+* ~~History~~
+* Refactor to reduce unnecessary duplicate code
 
 ## Building
 
@@ -48,6 +49,5 @@ Basic commands to get around osh
 ```
 exit
 quit
-help - will show a menu
-history - will show history
+history
 ```
