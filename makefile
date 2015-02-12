@@ -4,7 +4,7 @@ LDFLAGS=
 LFLAGS=-pthread
 SOURCES=main.c
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=ass
+EXECUTABLE=osh
 
 all: $(SOURCES) $(EXECUTABLE) clean
 

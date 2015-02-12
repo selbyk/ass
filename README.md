@@ -1,5 +1,7 @@
-# ass
-a simple shell
+# osh
+A simple UNIX shell with history feature
+
+First assignment in Operating System Concepts, 9e (Silberschatz, Galvin, and Gagne; 2009, 2011, or 2012)
 
 ### Goals
 * Read user input
@@ -28,11 +30,23 @@ make
 ### Interactive Interface
 
 ```bash
-./ass
+./osh
 ```
 
 ### CLI
 
 ```bash
-./ass <command> <options>
+./osh <command> <options>
+```
+
+## Usage
+Basic commands to get around ass
+
+### Built-in Commands
+
+```
+exit
+quit
+help - will show a menu
+history - will show history
 ```

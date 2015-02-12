@@ -1,9 +1,15 @@
 /*
-ASS: A Simple Shell
+Name: Kendrick, Selby (Last, First)
+Project: PA-1b (A Simple UNIX Shell)
+File: osh
+Instructor: Feng Chen
+Class: cs4103-sp15
+LogonID: cs410368
 
 A simple UNIX shell with history feature
 
-Author: Selby Kendrick
+My solution to the first assignment in Operating System Concepts,
+9e (Silberschatz, Galvin, and Gagne; 2009, 2011, or 2012)
 */
 
 /**
@@ -87,12 +93,17 @@ void interactive(){
       }
       args[argc++][counter] = '\0';
     } while (c == ' ');
-    free(args[argc]);
-    args[argc] = NULL;
-    execute_command(args[0], args);
-    if(!(argc > 0 && args[argc-1][0] == '&')) wait(); // Wait if & is appended to command
-    args[argc] = malloc(MAX_LINE * sizeof(char));
-    args[argc][0] = '\0';
+
+    if(strcmp (args[0],"exit") == 0 || strcmp (args[0],"quit") == 0){
+      run = 0;
+    } else {
+      free(args[argc]);
+      args[argc] = NULL;
+      execute_command(args[0], args);
+      if(!(argc > 0 && args[argc-1][0] == '&')) wait(); // Wait if & is appended to command
+      args[argc] = malloc(MAX_LINE * sizeof(char));
+      args[argc][0] = '\0';
+    }
   }
 }
 
