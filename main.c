@@ -34,7 +34,7 @@ My solution to the first assignment in Operating System Concepts,
 */
 void interactive();
 int execute_command(char *bin, char **args);
-int save_history(char **history, char *cmd_input);
+int save_history(char **history, char *cmd_input, int commands_run);
 
 /**
 * int main(int argc, char *argv[])
@@ -88,7 +88,8 @@ void interactive(){
   * Interactive while loop controled by input
   */
   int run = 1, // flag to determine when to exit program */
-      counter = 0; // position on each string */
+      counter = 0,
+      commands_run = 0; // position on each string */
   while (run) {
     printf("osh> ");
     fflush(stdout);
@@ -154,6 +155,23 @@ int execute_command(char *bin, char **args){
 *
 * update history to include cmd_input
 */
-int save_history(char **history, char *cmd_input){
-  return 0;
+int save_history(char **history, char *cmd_input, int commands_run){
+  int index = ++commands_run % HISTORY_SIZE;
+  strcpy (history[index], cmd_input);
+  return commands_run;
+}
+
+/**
+* int save_history(char **history, char *cmd_input)
+*
+* @param history {char *} binary eg {'ls' in 'ls -al'}
+* @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
+*
+* update history to include cmd_input
+*/
+int print_history(char **history, int commands_run){
+  int stop;
+  for(stop = commands_run-10 ; commands_run>stop; commands_run--)
+    printf("%d: %s", commands_run%HISTORY_SIZE, history[commands_run%HISTORY_SIZE]);
+  return commands_run;
 }
