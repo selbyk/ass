@@ -63,27 +63,22 @@ int main(int argc, char *argv[]) {
           printf("No line\n");
       } else {
         size_t argc = 0;
-        if(buf[0] != '\0') {
-          counter = 0;
-          for(i = 0; !isspace(buf[i]); i++) {
-            if(buf[i] == ' '){
-              args[argc++][counter] = '\0';
-              counter = 0;
-            };
-            args[argc][counter++] = buf[i];
-            //printf("%c", buf[i]);
+        i = 0;
+        while(buf[i] != '\0') {
+          for(counter = 0; !isspace(buf[i]); counter++) {
+            args[argc][counter] = buf[i++];
           }
-          if(i > 1){
-            args[argc++][counter] = '\0';
-            args[argc] = NULL;
-            printf("%d\n", argc);
-            for(i = 0; i < argc; i++) {
-              //printf("%s ", args[i]);
-            }
-            printf("%s - %d args\n", args[0], argc-1);
-            execute_command(args[0], args);
-            if(!(argc > 0 && args[argc-1] == '&')) wait(); // Wait if & is appended to command
+          args[argc++][counter] = '\0';
+        }
+        if(i > 1){
+          args[++argc] = NULL;
+          for(i = 0; i < argc; i++) {
+            printf("%s ", args[i]);
           }
+          printf("%s - %d args\n", args[0], argc-1);
+          execute_command(args[0], args);
+          if(!(argc > 0 && args[argc-1] == '&'))
+            wait(); // Wait if & is appended to command
         }
       }
     }
