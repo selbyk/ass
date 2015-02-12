@@ -41,7 +41,7 @@ make
 ```
 
 ## Usage
-Basic commands to get around ass
+Basic commands to get around osh
 
 ### Built-in Commands
 

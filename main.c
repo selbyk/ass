@@ -66,6 +66,10 @@ int main(int argc, char *argv[]) {
 * start interactive prompt for user to input Linux commands
 */
 void interactive(){
+  /**
+  * Initialize char double arrays to get input args and
+  * to hold our history
+  */
   char **args, // command line arguments
        **history; // hold our history
   args = malloc(MAX_LINE * sizeof(char *));
@@ -79,11 +83,18 @@ void interactive(){
     history[i] = malloc(HISTORY_SIZE * sizeof(char));
     history[i][0] = '\0';
   }
+
+  /**
+  * Interactive while loop controled by input
+  */
   int run = 1, // flag to determine when to exit program */
       counter = 0; // position on each string */
   while (run) {
     printf("osh> ");
     fflush(stdout);
+    /**
+    * Get input from stdin and save to args list
+    */
     size_t argc = 0;
     char c;
     do {
@@ -93,7 +104,10 @@ void interactive(){
       }
       args[argc++][counter] = '\0';
     } while (c == ' ');
-
+    /**
+    * Kill switch and end loop or
+    * exec input command and setup for next round
+    */
     if(strcmp (args[0],"exit") == 0 || strcmp (args[0],"quit") == 0){
       run = 0;
     } else {
@@ -105,6 +119,7 @@ void interactive(){
       args[argc][0] = '\0';
     }
   }
+  return;
 }
 
 /**
