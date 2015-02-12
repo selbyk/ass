@@ -35,6 +35,7 @@ My solution to the first assignment in Operating System Concepts,
 void interactive();
 int execute_command(char *bin, char **args);
 int save_history(char **history, char *cmd_input, int commands_run);
+int print_history(char **history, int commands_run);
 
 /**
 * int main(int argc, char *argv[])
@@ -70,6 +71,7 @@ void interactive(){
   * Initialize char double arrays to get input args and
   * to hold our history
   */
+  char last[80];
   char **args, // command line arguments
        **history; // hold our history
   args = malloc(MAX_LINE * sizeof(char *));
@@ -98,12 +100,15 @@ void interactive(){
     */
     size_t argc = 0;
     char c;
+    int line_length = 0;
     do {
       c = getchar();
       for(counter = 0; !isspace(c); counter++,c = getchar()) {
         args[argc][counter] = c; //putchar (c);  //printf("%c", c);
+        last[line_length++] = c;
       }
       args[argc++][counter] = '\0';
+      last[line_length] = '\0';
     } while (c == ' ');
     /**
     * Kill switch and end loop or
@@ -111,6 +116,8 @@ void interactive(){
     */
     if(strcmp (args[0],"exit") == 0 || strcmp (args[0],"quit") == 0){
       run = 0;
+    } else if(strcmp (args[0],"history") == 0){
+      print_history(history, commands_run);
     } else {
       free(args[argc]);
       args[argc] = NULL;
@@ -118,6 +125,7 @@ void interactive(){
       if(!(argc > 0 && args[argc-1][0] == '&')) wait(); // Wait if & is appended to command
       args[argc] = malloc(MAX_LINE * sizeof(char));
       args[argc][0] = '\0';
+      commands_run = save_history(history, last, commands_run);
     }
   }
   return;
@@ -148,7 +156,7 @@ int execute_command(char *bin, char **args){
 }
 
 /**
-* int save_history(char **history, char *cmd_input)
+* int save_history(char **history, char *cmd_input, int commands_run)
 *
 * @param history {char *} binary eg {'ls' in 'ls -al'}
 * @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
@@ -156,13 +164,13 @@ int execute_command(char *bin, char **args){
 * update history to include cmd_input
 */
 int save_history(char **history, char *cmd_input, int commands_run){
-  int index = ++commands_run % HISTORY_SIZE;
+  int index = commands_run++ % HISTORY_SIZE;
   strcpy (history[index], cmd_input);
   return commands_run;
 }
 
 /**
-* int save_history(char **history, char *cmd_input)
+* int save_history(char **history, int commands_run)
 *
 * @param history {char *} binary eg {'ls' in 'ls -al'}
 * @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
@@ -170,8 +178,14 @@ int save_history(char **history, char *cmd_input, int commands_run){
 * update history to include cmd_input
 */
 int print_history(char **history, int commands_run){
-  int stop;
-  for(stop = commands_run-10 ; commands_run>stop; commands_run--)
-    printf("%d: %s", commands_run%HISTORY_SIZE, history[commands_run%HISTORY_SIZE]);
+  int hist_num = HISTORY_SIZE+1,
+      last_index = (commands_run-1)%HISTORY_SIZE,
+      i;
+  for(i = last_index+1; i < HISTORY_SIZE; i++){
+    printf("%d: %s\n", --hist_num, history[i%HISTORY_SIZE]);
+  }
+  for(i = 0; i <= last_index; i++){
+    printf("%d: %s\n", --hist_num, history[i%HISTORY_SIZE]);
+  }
   return commands_run;
 }
