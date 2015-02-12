@@ -1,7 +1,8 @@
 # osh
 A simple UNIX shell with history feature
 
-First assignment in Operating System Concepts, 9e (Silberschatz, Galvin, and Gagne; 2009, 2011, or 2012)
+My solution to the first assignment in Operating System Concepts,
+9e (Silberschatz, Galvin, and Gagne; 2009, 2011, or 2012)
 
 ### Goals
 * Read user input
