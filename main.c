@@ -36,6 +36,7 @@ void interactive();
 int execute_command(char *bin, char **args);
 int save_history(char **history, char *cmd_input, int commands_run);
 int print_history(char **history, int commands_run);
+int run_history(char **history, int commands_run, int num_back);
 
 /**
 * int main(int argc, char *argv[])
@@ -118,7 +119,18 @@ void interactive(){
       run = 0;
     } else if(strcmp (args[0],"history") == 0){
       print_history(history, commands_run);
-    } else {
+    } else if(strcmp (args[0],"!!") == 0){
+      run_history(history, commands_run, 0);
+    } else if(args[0][0] == '!' && isdigit (args[0][1])){
+      int history_num = 0;
+      if(sscanf(args[0], "!%d", &history_num) == 1){
+        //printf("!%d", history_num);
+        if(history_num > 0 && history_num <= HISTORY_SIZE && history_num <= commands_run)
+          run_history(history, commands_run, history_num-1);
+        else
+          printf("Error: Invalid history request\n");
+      } else printf("!shitwentwrong\n");
+    }else {
       free(args[argc]);
       args[argc] = NULL;
       execute_command(args[0], args);
@@ -170,7 +182,7 @@ int save_history(char **history, char *cmd_input, int commands_run){
 }
 
 /**
-* int save_history(char **history, int commands_run)
+* int print_history(char **history, int commands_run)
 *
 * @param history {char *} binary eg {'ls' in 'ls -al'}
 * @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
@@ -182,10 +194,44 @@ int print_history(char **history, int commands_run){
       last_index = (commands_run-1)%HISTORY_SIZE,
       i;
   for(i = last_index+1; i < HISTORY_SIZE; i++){
-    printf("%d: %s\n", --hist_num, history[i%HISTORY_SIZE]);
+    if(--hist_num <= commands_run)
+      printf("%d %s\n", hist_num, history[i%HISTORY_SIZE]);
   }
   for(i = 0; i <= last_index; i++){
-    printf("%d: %s\n", --hist_num, history[i%HISTORY_SIZE]);
+    if(--hist_num <= commands_run)
+      printf("%d %s\n", hist_num, history[i%HISTORY_SIZE]);
   }
+  return commands_run;
+}
+
+/**
+* int run_history(char **history, int commands_run, int num_back)
+*
+* @param history {char *} binary eg {'ls' in 'ls -al'}
+* @param cmd_input {char **} binary eg {'ls -al' as ['ls','-al']}
+*
+* update history to include cmd_input
+*/
+int run_history(char **history, int commands_run, int num_back){
+  int index = (commands_run-1-num_back)%HISTORY_SIZE,
+      i;
+  char **args; // command line arguments
+  args = malloc(MAX_LINE * sizeof(char *));
+  for (i = 0; i < MAX_LINE; i++){
+    args[i] = malloc(MAX_LINE * sizeof(char));
+    args[i][0] = '\0';
+  }
+  printf("%d: %s\n", num_back+1, history[index]);
+  size_t argc = 0;
+  int line_length = 0, counter = 0;
+  i = 0;
+  do {
+    for(counter = 0; isalpha(history[index][i]) ; counter++,i++) {
+      args[argc][counter] = history[index][i]; // putchar (history[index][i]);  //printf("%c", c);
+    }
+    args[argc++][counter] = '\0';
+  } while (history[index][i++] == ' ');
+  args[argc++] = NULL;
+  execute_command(args[0], args); // printf("%d: %s\n", argc, args[0]);
   return commands_run;
 }
